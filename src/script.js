@@ -47,7 +47,8 @@ console.log(new THREE.BufferAttribute(randoms,1))
 const material = new THREE.ShaderMaterial({
     vertexShader:testVertexShader,
     fragmentShader:testFragmentShader,
-    side:THREE.DoubleSide
+    side:THREE.DoubleSide,
+    transparent:true
     // transparent:true,
     // uniforms:
     // {

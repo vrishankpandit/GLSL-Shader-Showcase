@@ -12,7 +12,7 @@
 
 
 
-// varying vec2 vUv;
+varying vec2 vUv;
 // varying float vElevation;
 
 void main(){
@@ -32,5 +32,7 @@ void main(){
     // // vTime=uTime;
     // vUv=uv;
     // vElevation=elevation;
+
+    vUv=uv;
 
 }
