@@ -1,10 +1,10 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'lil-gui'
-import testVertexShader from './shaders/test/vertex.glsl'
-import testFragmentShader from './shaders/test/fragment.glsl'
+import testVertexShader from './shaders/water/vertex.glsl'
+import testFragmentShader from './shaders/water/fragment.glsl'
 
-console.log(testVertexShader)
+// console.log(testVertexShader)
 
 /**
  * Base
@@ -30,7 +30,7 @@ const flagTexure=textureLoader.load('/textures/india-flag.jpeg')
  * Test mesh
  */
 // Geometry
-const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
+const geometry = new THREE.PlaneGeometry(1, 1, 64, 64)
 
 const count=geometry.attributes.position.count;
 const randoms=new Float32Array(count)
@@ -47,8 +47,9 @@ console.log(new THREE.BufferAttribute(randoms,1))
 const material = new THREE.ShaderMaterial({
     vertexShader:testVertexShader,
     fragmentShader:testFragmentShader,
-    side:THREE.DoubleSide,
-    transparent:true
+    transparent:true,
+    
+    // wireframe:true
     // transparent:true,
     // uniforms:
     // {
@@ -57,13 +58,26 @@ const material = new THREE.ShaderMaterial({
     //     uColor:{value:new THREE.Color('#6eb7dd')},
     //     uTexture:{value:flagTexure }
     // }
+
+    uniforms:{
+        uBigWaveElevation:{ value : 0.2},
+        uBigWaveFrequency:{ value: new THREE.Vector2(7.0,2.0)},
+        uTime:{value : 0.0},
+        uWaveSpeed:{value: 2.0}
+    }
 })
+
+gui.add(material.uniforms.uBigWaveElevation,'value').min(0.0).max(1.0).step(0.01).name("uBigWaveElevation");
+gui.add(material.uniforms.uBigWaveFrequency.value,'x').min(0.0).max(20.0).step(0.001).name("uBigWaveFrequncy.x");
+gui.add(material.uniforms.uBigWaveFrequency.value,'y').min(0.0).max(20.0).step(0.001).name("uBigWaveFrequncy.y");
+gui.add(material.uniforms.uWaveSpeed,'value').min(0.0).max(5.0).step(0.001).name("uWaveSpeed");
 
 // gui.add(material.uniforms.uFrequency.value,'x').min(0).max(20).step(0.01).name('FrequencyX')
 // gui.add(material.uniforms.uFrequency.value,'y').min(0).max(20).step(0.01).name('FrequencyY')
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material)
+mesh.rotation.x=-Math.PI * 0.5;
 scene.add(mesh)
 
 /**
@@ -94,7 +108,7 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(0.25, - 0.25, 1)
+camera.position.set(1, 1, 1)
 scene.add(camera)
 
 // Controls
@@ -118,7 +132,7 @@ const clock = new THREE.Clock()
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
-    // material.uniforms.uTime.value=elapsedTime;
+    material.uniforms.uTime.value=elapsedTime;
 
     // Update controls
     controls.update()

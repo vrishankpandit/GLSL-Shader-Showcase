@@ -285,19 +285,21 @@ void main(){
     // float strength=1.0-abs(cnoise(vUv*10.0));
 
     // pattern 39
-    float strength=sin(1.0-abs(cnoise(vUv*10.0)) * 10.0);
+    // float strength=sin(1.0-abs(cnoise(vUv*10.0)) * 10.0);
 
     // //Black and white color
     // gl_FragColor=vec4(strength,strength,strength,1.0);
 
     //clamp strenght
-    strength=clamp(strength,0.0,1.0);
+    // strength=clamp(strength,0.0,1.0);
 
     //colored version
-    vec3 blackColor=vec3(0.0);
-    vec3 uvColor=vec3(vUv,1.0);
+    // vec3 blackColor=vec3(0.0);
+    // vec3 uvColor=vec3(vUv,1.0);
 
-    vec3 mixedColor = mix(blackColor , uvColor ,strength);
-    gl_FragColor=vec4(mixedColor , 1.0);
+    // vec3 mixedColor = mix(blackColor , uvColor ,strength);
+
+
+    gl_FragColor=vec4(1.0,0.0,0.0,1.0);
 
 }
