@@ -12,6 +12,8 @@ import testFragmentShader from './shaders/water/fragment.glsl'
 // Debug
 const gui = new dat.GUI()
 
+const debugObject={}
+
 
 
 // Canvas
@@ -42,6 +44,8 @@ for(let i=0;i<count;i++){
 geometry.setAttribute('aRandom',new THREE.BufferAttribute(randoms,1))
 console.log(new THREE.BufferAttribute(randoms,1))
 
+debugObject.depthColor='#186691'
+debugObject.surfaceColor='#9bd8ff'
 
 // Material
 const material = new THREE.ShaderMaterial({
@@ -60,10 +64,22 @@ const material = new THREE.ShaderMaterial({
     // }
 
     uniforms:{
-        uBigWaveElevation:{ value : 0.2},
-        uBigWaveFrequency:{ value: new THREE.Vector2(7.0,2.0)},
         uTime:{value : 0.0},
-        uWaveSpeed:{value: 2.0}
+
+        uBigWaveElevation:{ value : 0.15},
+        uBigWaveFrequency:{ value: new THREE.Vector2(7.0,2.0)},
+        uWaveSpeed:{value: 1.0},
+
+        uSmallWaveElevation:{value: 0.15},
+        uSmallWaveSpeed:{value:0.3 },
+        uSmallWaveFrequency:{value: 5.0},
+        uSmallWaveIterations:{value:4.0},
+
+        uDepthColor:{value : new THREE.Color(debugObject.depthColor)},
+        uSurfaceColor:{value : new THREE.Color(debugObject.surfaceColor)},
+        uColorOffset:{value : 0.08},
+
+        uColorMultiplier:{value : 5.0}
     }
 })
 
@@ -71,6 +87,25 @@ gui.add(material.uniforms.uBigWaveElevation,'value').min(0.0).max(1.0).step(0.01
 gui.add(material.uniforms.uBigWaveFrequency.value,'x').min(0.0).max(20.0).step(0.001).name("uBigWaveFrequncy.x");
 gui.add(material.uniforms.uBigWaveFrequency.value,'y').min(0.0).max(20.0).step(0.001).name("uBigWaveFrequncy.y");
 gui.add(material.uniforms.uWaveSpeed,'value').min(0.0).max(5.0).step(0.001).name("uWaveSpeed");
+gui
+.addColor(debugObject,'depthColor')
+.name("depthColor")
+.onChange((value)=>{
+    material.uniforms.uDepthColor.value.set(debugObject.depthColor);
+});
+gui.addColor(debugObject,'surfaceColor').name("surfaceColor")
+.onChange((value)=>{
+    material.uniforms.uSurfaceColor.value.set(debugObject.surfaceColor);
+});;
+
+gui.add(material.uniforms.uColorOffset,'value').min(0.0).max(1.0).step(0.001).name("uColorOffset");
+gui.add(material.uniforms.uColorMultiplier,'value').min(0.0).max(6.0).step(0.001).name("uColorMultiplier");
+
+gui.add(material.uniforms.uSmallWaveIterations,'value').min(0.0).max(10.0).step(0.001).name("uSmallWaveIterations");
+gui.add(material.uniforms.uSmallWaveFrequency,'value').min(0.0).max(10.0).step(0.001).name("uSmallWaveFrequency");
+gui.add(material.uniforms.uSmallWaveSpeed,'value').min(0.0).max(2.0).step(0.001).name("uSmallWaveSpeed");
+gui.add(material.uniforms.uSmallWaveElevation,'value').min(0.0).max(1.0).step(0.001).name("uSmallWaveElevation");
+
 
 // gui.add(material.uniforms.uFrequency.value,'x').min(0).max(20).step(0.01).name('FrequencyX')
 // gui.add(material.uniforms.uFrequency.value,'y').min(0).max(20).step(0.01).name('FrequencyY')
@@ -108,7 +143,7 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(1, 1, 1)
+camera.position.set(0.5,0.5,0.5)
 scene.add(camera)
 
 // Controls
